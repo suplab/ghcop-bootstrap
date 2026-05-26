@@ -1,0 +1,28 @@
+{
+  "recommendations": [
+    "github.copilot",
+    "github.copilot-chat",
+    "redhat.java",
+    "vscjava.vscode-java-pack",
+    "vscjava.vscode-spring-boot-dashboard",
+    "vscjava.vscode-spring-initializr",
+    "vmware.vscode-spring-boot",
+    "vscjava.vscode-java-test",
+    "vscjava.vscode-maven",
+    "angular.ng-template",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "sonarsource.sonarlint-vscode",
+    "streetsidesoftware.code-spell-checker",
+    "IBM.zopeneditor",
+    "broadcomMFD.cobol-language-support",
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    "yzhang.markdown-all-in-one",
+    "redhat.vscode-yaml",
+    "42crunch.vscode-openapi",
+    "ms-azuretools.vscode-docker",
+    "EditorConfig.EditorConfig"
+  ],
+  "unwantedRecommendations": []
+}

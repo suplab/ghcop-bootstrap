@@ -1,0 +1,97 @@
+# EditorConfig — https://editorconfig.org
+# Ensures consistent formatting across all IDEs and editors.
+
+root = true
+
+# ─── Defaults (all files) ─────────────────────────────────────────────────────
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 120
+
+# ─── Java ─────────────────────────────────────────────────────────────────────
+[*.java]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+# ─── TypeScript / JavaScript ──────────────────────────────────────────────────
+[*.{ts,tsx,js,jsx,mjs,cjs}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# ─── HTML templates ───────────────────────────────────────────────────────────
+[*.html]
+indent_style = space
+indent_size = 2
+max_line_length = 140
+
+# ─── Stylesheets ──────────────────────────────────────────────────────────────
+[*.{css,scss,sass,less}]
+indent_style = space
+indent_size = 2
+
+# ─── Data formats ─────────────────────────────────────────────────────────────
+[*.{json,jsonc}]
+indent_style = space
+indent_size = 2
+
+[*.{yaml,yml}]
+indent_style = space
+indent_size = 2
+
+[*.xml]
+indent_style = space
+indent_size = 4
+
+# ─── SQL ──────────────────────────────────────────────────────────────────────
+[*.sql]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+# ─── Mainframe / COBOL ────────────────────────────────────────────────────────
+# COBOL fixed-format: Area A starts col 8, Area B starts col 12.
+# Columns 1-6 = sequence, col 7 = indicator, col 73-80 = identification.
+# Do not auto-format COBOL files — column positions are semantic.
+[*.{cbl,cob,cpy,pco}]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = false
+max_line_length = 80
+
+# ─── JCL ──────────────────────────────────────────────────────────────────────
+[*.jcl]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = false
+max_line_length = 80
+
+# ─── Assembler ────────────────────────────────────────────────────────────────
+[*.{asm,hlasm,s}]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = false
+max_line_length = 80
+
+# ─── Markdown / Docs ──────────────────────────────────────────────────────────
+[*.{md,mdx}]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = false
+max_line_length = off
+
+# ─── Shell scripts ────────────────────────────────────────────────────────────
+[*.{sh,bash}]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+
+# ─── Makefiles (must use tabs) ────────────────────────────────────────────────
+[Makefile]
+indent_style = tab
