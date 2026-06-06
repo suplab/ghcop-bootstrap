@@ -1,8 +1,8 @@
-# GitHub Copilot Bootstrap Repository
+# Enterprise Engineering Intelligence Kit (EEIK) Bootstrap
 
-A ready-to-fork workspace seed that provisions GitHub Copilot with rich, structured context for enterprise software development programs. Drop the files from this repository into any project and Copilot becomes a context-aware assistant that understands your technology stack, coding conventions, specialist agent roles, and operational processes — from day one.
+A ready-to-fork workspace seed that provisions Claude Code and GitHub Copilot with rich, structured context for enterprise software development programs. Drop the files from this repository into any project and Copilot becomes a context-aware assistant that understands your technology stack, coding conventions, specialist agent roles, and operational processes — from day one.
 
-This is **not a runnable application**. It is a configuration and context layer for GitHub Copilot.
+This is **not a runnable application**. It is a configuration and context layer for Claude Code and GitHub Copilot.
 
 ---
 
