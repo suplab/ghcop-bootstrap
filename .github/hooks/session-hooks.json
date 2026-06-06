@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "echo \"[Copilot Session Start] $(date -u +%Y-%m-%dT%H:%M:%SZ) | Project: ${PWD##*/}\" >> .copilot-session.log 2>/dev/null || true",
+        "timeoutSec": 5
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "echo \"[Copilot Session End] $(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> .copilot-session.log 2>/dev/null || true",
+        "timeoutSec": 5
+      }
+    ],
+    "userPromptSubmitted": [
+      {
+        "type": "command",
+        "bash": "echo \"[Prompt] $(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> .copilot-prompts.log 2>/dev/null || true",
+        "timeoutSec": 3
+      }
+    ]
+  }
+}

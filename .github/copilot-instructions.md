@@ -153,6 +153,97 @@ When reviewing code, use these labels consistently:
 
 ---
 
+## Available Agents
+
+Select an agent from the Copilot Chat **@** dropdown to activate a specialist persona. Full catalogue: see `AGENTS.md` at the repository root.
+
+### Java Development
+| Agent | Activate With | Use For |
+|-------|--------------|---------|
+| Java Developer | `@java-dev` | Ticket-scoped Spring Boot implementation |
+| Java Tech Lead | `@java-tech-lead` | PR gating, standards enforcement, tech debt |
+| Java Test Engineer | `@java-tester` | JUnit 5 / Testcontainers test suites |
+| JaCoCo Coverage Analyst | `@jacoco-coverage-tester` | Coverage gap analysis and targeted test generation |
+| Senior Java/Angular Developer | `@developer` | Full-stack Java + Angular implementation |
+
+### Angular Development
+| Agent | Activate With | Use For |
+|-------|--------------|---------|
+| Angular Developer | `@angular-dev` | Standalone components, signals, lazy routes |
+| Angular Test Engineer | `@angular-tester` | Jasmine/TestBed specs |
+| Angular Coverage Analyst | `@angular-coverage-checker` | Istanbul/Karma coverage gap analysis |
+
+### Architecture & Design
+| Agent | Activate With | Use For |
+|-------|--------------|---------|
+| Solution Architect | `@architect` | ADRs, bounded contexts, API contracts |
+| Enterprise Architect | `@enterprise-architect` | Capability maps, technology lifecycle, TOGAF |
+| AWS Solution Architect | `@aws-architect` | Well-Architected reviews, CDK stacks, cost estimates |
+
+### Code Quality & Security
+| Agent | Activate With | Use For |
+|-------|--------------|---------|
+| Code Reviewer | `@reviewer` | [BLOCKER]/[MAJOR]/[MINOR]/[NIT] PR reviews |
+| Security Auditor | `@security-auditor` | OWASP Top 10 audit with remediation code |
+| Performance Specialist | `@performance-reviewer` | N+1 queries, resource leaks, rendering |
+| Coverage Guardian | `@coverage-enforcer` | Coverage gap analysis and targeted tests |
+| Test Quality Inspector | `@test-quality-enforcer` | Anti-pattern detection and test regeneration |
+
+### Infrastructure & Deployment
+| Agent | Activate With | Use For |
+|-------|--------------|---------|
+| CDK / Terraform Helper | `@cdk-terraform-helper` | IaC stacks (CDK TypeScript or Terraform HCL) |
+| AWS Deploy Helper | `@aws-deploy-helper` | Deploy commands, pre-deploy checklist, rollback |
+| Local Deploy Helper | `@local-deploy-helper` | Docker Compose setup, smoke tests |
+| Containerisation Helper | `@containerisation-helper` | Dockerfiles, K8s manifests, Helm |
+| CI Engineer | `@ci-engineer` | GitHub Actions / Jenkins pipelines |
+
+### Data, ML & AI (AWS)
+| Agent | Activate With | Use For |
+|-------|--------------|---------|
+| AWS Data Scientist | `@data-scientist-aws` | SageMaker notebooks, Glue ETL, Athena |
+| AWS ML Engineer | `@ml-engineer-aws` | SageMaker pipelines, model registry, MLOps |
+| AWS AI Engineer | `@ai-engineer-aws` | Bedrock LLM, RAG pipelines, guardrails |
+
+### Delivery & Operations
+| Agent | Activate With | Use For |
+|-------|--------------|---------|
+| Estimator | `@estimator` | Bottom-up estimates (8h/day × 80% = 6.4h/day) |
+| Project Tracker | `@project-tracker` | Sprint burndown, story status, velocity |
+| Ops Engineer | `@ops-engineer` | CloudWatch dashboards, alarms, runbooks |
+| Incident Handler | `@incident-handler` | P1/P2 war room coordination |
+| RCA Agent | `@rca-agent` | 5-Whys root cause analysis |
+
+### Modernisation
+| Agent | Activate With | Use For |
+|-------|--------------|---------|
+| Mainframe Modernization Specialist | `@modernization-expert` | COBOL → Java with semantic risk matrix |
+| Business Analyst | `@analyst` | OpenAPI specs, Gherkin acceptance criteria |
+| QA Automation Engineer | `@tester` | Full test pyramid for any stack |
+
+---
+
+## Agent Skills (Auto-Loaded)
+
+The following skills in `.github/skills/` are loaded automatically by Copilot when relevant:
+
+- **estimation** — Bottom-up effort estimation with P50/P80/P90 confidence ranges
+- **jacoco-analysis** — JaCoCo report parsing and gap analysis
+- **aws-cdk-deploy** — CDK deploy commands and rollback procedures
+- **incident-response** — ITIL P1/P2 templates and escalation matrix
+- **code-quality-scan** — SonarQube, SpotBugs, Checkstyle, OWASP report triage
+
+---
+
+## Hooks
+
+Lifecycle hooks in `.github/hooks/` log session activity to `.copilot-*.log` files:
+
+- **session-hooks.json** — logs session start/end and prompt submissions
+- **tool-use-hooks.json** — logs tool invocations and outcomes
+
+---
+
 ## IntelliJ / JetBrains Usage
 
-This file is loaded automatically by GitHub Copilot in both VS Code and IntelliJ IDEA. The scoped `*.instructions.md` files in `.github/instructions/` and prompt files in `.github/prompts/` are accessible via Copilot Chat `#file:` reference in IntelliJ. See `intellij/` directory for IntelliJ-specific setup guidance.
+This file is loaded automatically by GitHub Copilot in both VS Code and IntelliJ IDEA. Agents (`.github/agents/`), instruction files (`.github/instructions/`), and prompt files (`.github/prompts/`) are accessible via Copilot Chat `#file:` reference in IntelliJ. See `intellij/` directory for IntelliJ-specific setup guidance.

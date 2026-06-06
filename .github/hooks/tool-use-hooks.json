@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "echo \"[PreToolUse] Tool: ${COPILOT_TOOL_NAME:-unknown} | $(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> .copilot-tool.log 2>/dev/null || true",
+        "timeoutSec": 3
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "echo \"[PostToolUse] Tool: ${COPILOT_TOOL_NAME:-unknown} | Exit: ${COPILOT_TOOL_EXIT_CODE:-?} | $(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> .copilot-tool.log 2>/dev/null || true",
+        "timeoutSec": 3
+      }
+    ],
+    "errorOccurred": [
+      {
+        "type": "command",
+        "bash": "echo \"[Error] $(date -u +%Y-%m-%dT%H:%M:%SZ) | ${COPILOT_ERROR_MESSAGE:-unknown error}\" >> .copilot-errors.log 2>/dev/null || true",
+        "timeoutSec": 3
+      }
+    ]
+  }
+}

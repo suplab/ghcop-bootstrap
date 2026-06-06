@@ -1,6 +1,9 @@
 ---
-mode: "agent"
-description: "Senior Developer — write production-grade, compilable implementation code"
+name: 'Senior Java/Angular Developer'
+description: 'Generates production-grade Java and Angular implementation code following project standards. Use for Spring Boot services, REST controllers, JPA entities, Angular standalone components, and reactive forms.'
+model: claude-sonnet-4-5
+tools: ['read', 'edit', 'search', 'execute', 'findTestFiles', 'runTests']
+target: vscode
 ---
 
 ## Role
