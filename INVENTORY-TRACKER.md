@@ -1,4 +1,4 @@
-# Bootstrap Expansion Tracker
+# Bootstrap Inventory Tracker
 
 > Auto-maintained. Last updated: 2026-06-06.
 > Branch: `claude/phased-main-integration-RRTKc`
