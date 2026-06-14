@@ -52,4 +52,32 @@ if grep -nE '(AKIA[0-9A-Z]{16}|aws_secret_access_key\s*=\s*[A-Za-z0-9/+=]{40})' 
   echo "WARNING: Potential AWS credentials detected in $FILE_PATH — use Secrets Manager." >&2
 fi
 
+# ─── Python files ─────────────────────────────────────────────────────────────
+if echo "$FILE_PATH" | grep -qE '\.py$' && ! echo "$FILE_PATH" | grep -qE '(test_|_test)\.py$'; then
+  if grep -n 'print(' "$FILE_PATH" 2>/dev/null | grep -v '#' | grep -v '"""' | head -3; then
+    echo "WARNING: print() detected in $FILE_PATH — use logging.getLogger(__name__) instead." >&2
+  fi
+  if grep -nE '^except:\s*$' "$FILE_PATH" 2>/dev/null | head -3; then
+    echo "WARNING: Bare 'except:' in $FILE_PATH — always catch a specific exception class." >&2
+  fi
+  if grep -n 'import \*' "$FILE_PATH" 2>/dev/null | grep -v '#' | head -3; then
+    echo "WARNING: Wildcard 'import *' in $FILE_PATH — use explicit imports." >&2
+  fi
+fi
+
+# ─── SQL files ────────────────────────────────────────────────────────────────
+if echo "$FILE_PATH" | grep -qE '\.sql$'; then
+  if grep -ni 'SELECT \*' "$FILE_PATH" 2>/dev/null | head -3; then
+    echo "WARNING: SELECT * in $FILE_PATH — always specify explicit column lists." >&2
+  fi
+fi
+
+# ─── YAML / Properties files: hardcoded secrets ───────────────────────────────
+if echo "$FILE_PATH" | grep -qE '\.(yml|yaml|properties)$'; then
+  if grep -nE '(password|secret|api[_-]?key|apikey)\s*[:=]\s*[A-Za-z0-9_$@!%*#?&]{8,}' \
+      "$FILE_PATH" 2>/dev/null | grep -vi '^\s*#' | grep -vi '\$\{' | grep -vi 'ENC(' | head -3; then
+    echo "WARNING: Possible hardcoded credential in $FILE_PATH — use environment variables or Secrets Manager." >&2
+  fi
+fi
+
 exit 0

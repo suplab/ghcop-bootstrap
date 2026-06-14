@@ -1,0 +1,163 @@
+name: Security Scan
+
+on:
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 3 * * 1'  # Every Monday at 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write  # For uploading SARIF results to GitHub Security tab
+  pull-requests: write
+
+jobs:
+  # ─── Secrets Scanning ───────────────────────────────────────────────────────
+  secrets-scan:
+    name: Secrets Scan (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for commit scanning
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+  # ─── Dependency Vulnerability Scan ──────────────────────────────────────────
+  dependency-scan:
+    name: Dependency Vulnerabilities
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Java (OWASP)
+            check: java
+          - name: Node / Angular (npm audit)
+            check: node
+          - name: Python (pip-audit)
+            check: python
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Java — OWASP Dependency Check
+        if: matrix.check == 'java'
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: '${{ github.repository }}'
+          path: '.'
+          format: 'SARIF'
+          args: >
+            --failOnCVSS 7
+            --enableRetired
+        env:
+          JAVA_HOME: /opt/jdk
+
+      - name: Java — Upload SARIF
+        if: matrix.check == 'java' && always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: reports/dependency-check-report.sarif
+
+      - name: Node — npm audit
+        if: matrix.check == 'node'
+        run: |
+          if [ -f package.json ]; then
+            npm audit --audit-level=high --json > npm-audit.json || true
+            # Fail if HIGH or CRITICAL vulnerabilities found
+            node -e "
+              const report = require('./npm-audit.json');
+              const vulns = report.metadata?.vulnerabilities || {};
+              const critical = (vulns.critical || 0) + (vulns.high || 0);
+              if (critical > 0) {
+                console.error('FAIL: ' + critical + ' high/critical vulnerabilities found');
+                process.exit(1);
+              }
+              console.log('PASS: No high/critical vulnerabilities');
+            "
+          else
+            echo "No package.json found, skipping npm audit"
+          fi
+
+      - name: Python — pip-audit
+        if: matrix.check == 'python'
+        run: |
+          if [ -f pyproject.toml ] || [ -f requirements.txt ]; then
+            pip install pip-audit
+            pip-audit --severity HIGH --format sarif --output pip-audit.sarif || EXIT_CODE=$?
+            if [ -n "$EXIT_CODE" ]; then
+              echo "pip-audit found vulnerabilities — see sarif report"
+              exit $EXIT_CODE
+            fi
+          else
+            echo "No Python project found, skipping pip-audit"
+          fi
+
+      - name: Python — Upload SARIF
+        if: matrix.check == 'python' && always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: pip-audit.sarif
+        continue-on-error: true
+
+  # ─── Container Image Scan ───────────────────────────────────────────────────
+  container-scan:
+    name: Container Vulnerability Scan (Trivy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image for scanning
+        run: |
+          if [ -f Dockerfile ]; then
+            docker build -t scan-target:${{ github.sha }} .
+          else
+            echo "No Dockerfile found, skipping container scan"
+            echo "SKIP_CONTAINER_SCAN=true" >> $GITHUB_ENV
+          fi
+
+      - name: Trivy — scan for vulnerabilities
+        if: env.SKIP_CONTAINER_SCAN != 'true'
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'scan-target:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+
+      - name: Upload Trivy SARIF
+        if: env.SKIP_CONTAINER_SCAN != 'true' && always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
+
+  # ─── Static Analysis (CodeQL) ───────────────────────────────────────────────
+  codeql:
+    name: CodeQL Static Analysis
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [java-kotlin, javascript-typescript]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialise CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:${{ matrix.language }}'

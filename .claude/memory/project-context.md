@@ -1,6 +1,20 @@
 # Project Context
 
 > **Bootstrap Template** — Replace all `<!-- TODO -->` values with project-specific information when adopting this seed.
+>
+> **FIRST-STEPS CHECKLIST** — Complete these 6 mandatory fields before your first Claude Code session:
+> 1. `Project Name` (Project Identity table)
+> 2. `Team` (Project Identity table)
+> 3. At least one row in the `Service Inventory` table
+> 4. `Dev` and `Production` environment URLs
+> 5. `User Auth` mechanism (Authentication Patterns)
+> 6. `Engine` and `Migration tool` (Database)
+>
+> Run `/setup-memory` to be guided through all fields interactively.
+>
+> **EXAMPLE** entries are shown as `<!-- EXAMPLE: ... -->` inline — replace with your actual values.
+> Fields still needing input are marked `<!-- TODO -->`.
+
 
 ---
 
