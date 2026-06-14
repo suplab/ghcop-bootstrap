@@ -28,11 +28,14 @@ Agents live in `.claude/agents/`. Claude Code automatically selects the most rel
 | Domain | Agents |
 |--------|--------|
 | Java / Spring Boot | `java-developer`, `java-tech-lead`, `java-tester`, `jacoco-coverage-tester`, `senior-developer` |
+| Python | `python-developer` |
 | Angular | `angular-developer`, `angular-tester`, `angular-coverage-checker` |
 | Architecture | `architect`, `enterprise-architect`, `arb-reviewer` |
-| Cloud / Infra | `aws-architect`, `cdk-terraform-helper`, `aws-deploy-helper`, `ci-engineer`, `containerisation-helper`, `devsecops-engineer`, `local-deploy-helper` |
+| Cloud / Infra | `aws-architect`, `cdk-terraform-helper`, `aws-deploy-helper`, `ci-engineer`, `containerisation-helper`, `kubernetes-engineer`, `devsecops-engineer`, `local-deploy-helper` |
+| Data | `data-engineer`, `data-scientist` |
+| Database | `dba-advisor` |
 | Quality | `code-reviewer`, `security-auditor`, `performance-engineer`, `coverage-enforcer`, `test-quality-enforcer`, `tester` |
-| AI / ML | `ai-engineer`, `ml-engineer`, `data-scientist`, `mlops-engineer`, `ai-governance-officer` |
+| AI / ML | `ai-engineer`, `ml-engineer`, `mlops-engineer`, `ai-governance-officer` |
 | Agentic AI | `langraph-engineer`, `crewai-engineer`, `autogen-engineer`, `mcp-engineer`, `a2a-engineer` |
 | Delivery | `estimator`, `project-tracker`, `business-analyst`, `technical-writer` |
 | Operations | `incident-handler`, `rca-agent`, `ops-engineer`, `sre-engineer` |
@@ -63,6 +66,24 @@ Agents live in `.claude/agents/`. Claude Code automatically selects the most rel
 - IBM Enterprise COBOL 6.x, CICS, DB2 z/OS
 - IBM i (AS400): RPG IV, RPGLE (ILE), CL, DDS, DB2 for i
 - JCL, VSAM, QSAM
+
+### Python
+- Python 3.11+ with type annotations (`mypy --strict`)
+- FastAPI with Pydantic v2, SQLAlchemy async, Alembic
+- pytest with `pytest-asyncio`, `pytest-cov`, `testcontainers-python`
+- Ruff for formatting and linting
+
+### Data Engineering
+- Apache Kafka with Schema Registry (Avro / Protobuf)
+- Apache Spark (PySpark DataFrame API)
+- dbt (staging → intermediate → mart model layers)
+- AWS Glue, Step Functions, Airflow
+
+### GraphQL
+- Schema-first with `.graphql` SDL files
+- Spring for GraphQL (Java) or Strawberry / Ariadne (Python)
+- DataLoader for N+1 prevention
+- Cursor-based (Relay) pagination
 
 ### AWS
 - CDK TypeScript (L2/L3 constructs preferred)
@@ -136,6 +157,7 @@ Invoke the `/estimate` command or activate the `estimator` agent for a full brea
 | Command | Description |
 |---------|-------------|
 | `/bootstrap` | Interactive project discovery — generates `project-manifest.yaml` |
+| `/setup-memory` | Interactive interview to populate all `.claude/memory/` files with project context |
 | `/validate-manifest` | Validate `project-manifest.yaml` against the schema and governance rules |
 | `/generate-repo` | Generate full repository scaffold from validated manifest |
 | `/generate-agent --blueprint <type> --name <name>` | Generate a project-specific agent from a blueprint |
@@ -143,9 +165,13 @@ Invoke the `/estimate` command or activate the `estimator` agent for a full brea
 | `/rca "symptoms"` | Open an RCA workflow with 5-Whys template |
 | `/estimate "feature description"` | Produce a bottom-up P50/P80/P90 effort estimate |
 | `/review` | Run full PR review checklist across security, performance, and quality |
+| `/threat-model "service description"` | STRIDE threat model for a service or bounded context |
 | `/incident "severity: P1\|P2, service: name, symptom: description"` | Declare and coordinate an incident |
 | `/security-scan [file or directory]` | OWASP Top 10 review plus secrets scan |
 | `/deploy-check "env: dev\|staging\|prod, service: name"` | Pre-deployment readiness checklist |
+| `/migrate-db "description"` | Generate Flyway/Liquibase migration with rollback and risk assessment |
+| `/api-contract "resource description"` | Contract-first API design — OpenAPI stub + Pact consumer test |
+| `/tech-debt add "description"` | Register a new tech debt item to `.claude/memory/tech-debt.md` |
 | `/memory-update "what changed"` | Update relevant `.claude/memory/` files with new context |
 | `/coverage-report [module path]` | JaCoCo/Istanbul coverage analysis with targeted test stubs |
 | `/sync-docs` | Sync API documentation against OpenAPI specs |
